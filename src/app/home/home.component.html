@@ -1,0 +1,288 @@
+<div class="employee_settings">
+    <mat-tab-group dynamicHeight>
+        <mat-tab label="Bảng Tổng Hợp" *ngIf="listable">
+            <div class="pt-1 row">
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-md-12 text-left my-auto pb-1">
+                            <strong>Tìm kiếm</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-md-12 text-left my-auto pb-1">
+                            <strong>Phòng/Ban</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-md-12 text-left my-auto pb-1" style="position: relative">
+                            <input class="form-control" type="text" (keydown)="checkSearch($event)" [(ngModel)]="search"
+                                   placeholder="Nhập từ cần tìm">
+                            <i class="fa fa-search" style="position: absolute; top: 6px; right: 25px; font-size: 25px"
+                               (click)="getAllEmployees()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-md-12 text-left my-auto">
+                            <select [(ngModel)]="selectDepartment" class="form-control" (change)="getAllEmployees()">
+                                <option [value]="-1">Tất cả</option>
+                                <option *ngFor="let department of departments"
+                                        [value]="department.id">{{department.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-1">
+                <div class="mat-elevation-z8">
+                    <button class="export btn btn-success" (click)="exportExcel()">
+                        <i class="fa fa-download mr-10"></i>Xuất Excel
+                    </button>
+                    <div class="table-container">
+                        <table class="table table-hover table-striped" mat-table #table matSort
+                               [dataSource]="dataSource">
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="emp.id">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="emp.id"> Mã nhân viên</th>
+                                <td mat-cell *matCellDef="let element"> {{element.employee_id}} </td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="emp.full_name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="emp.full_name"> Họ tên</th>
+                                <td mat-cell *matCellDef="let element"> {{convertFullname(element.full_name)}} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="emp.email">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="emp.email"> Email</th>
+                                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="dp.name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="dp.name"> Phòng ban</th>
+                                <td mat-cell *matCellDef="let element"> {{element.department_name}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div>
+                                        <span [title]="unAssessmentList(element)"
+                                              [ngClass]="{'text-success': checkAssessment(element), 'text-danger': !checkAssessment(element)}">{{ checkAssessment(element) ? 'Hoàn thành' : 'Chưa hoàn thành' }}</span>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="sa.assessment_year">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header="sa.assessment_year"> Năm đánh
+                                    giá
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{element.assessment_year}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="employees">
+                                <th mat-header-cell *matHeaderCellDef> Nội dung đánh giá</th>
+                                <td mat-cell *matCellDef="let element"><span [innerHTML]="stringify(element)"></span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openEmployeeSurvey(row)"></tr>
+                        </table>
+                    </div>
+                    <mat-paginator #paginator
+                                   [length]="resultsLength"
+                                   [pageSize]="employeesPerPage"
+                                   [pageSizeOptions]="pageSizeOptions"
+                                   [showFirstLastButtons]="true">
+                    </mat-paginator>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Đánh Giá Nhân Viên">
+            <div [ngClass]="{'assessment_body': !ending, 'assessment_body2': ending}">
+                <div class="pt-1">
+                    <span style="font-weight: bold; margin-right: 10px">Phòng ban:</span><span>{{ assessmentsData?.department_name || '' }}</span>
+                    <span style="font-weight: bold; margin-left: 30px; margin-right: 10px">Người đánh giá:</span><span>{{ convertFullname(assessmentsData?.full_name) }}</span>
+                    <span style="font-weight: bold; margin-left: 30px; margin-right: 10px">Chức vụ:</span><span>{{ convertFullname(assessmentsData?.position) }}</span>
+                </div>
+                <div class="pt-1">
+                    <p style="font-weight: bold; margin-bottom: 0px;">Hướng dẫn cho điểm:</p>
+                    <table class="table table-bordered" style="width: 750px">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center; width: 50px">ĐIỂM</th>
+                            <th style="text-align: center; width: 100px">XẾP LOẠI</th>
+                            <th style="text-align: center; width: 600px">MÔ TẢ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container *ngFor="let tutorial of tutorials">
+                            <tr>
+                                <td style="text-align: center; background: #dae7f3; font-weight: bold"
+                                    [innerHTML]="tutorial.value | safeHtml"></td>
+                                <td style="text-align: left; background: #dae7f3"
+                                    [innerHTML]="tutorial.kind | safeHtml"></td>
+                                <td style="text-align: justify; background: #dae7f3"
+                                    [innerHTML]="tutorial.description | safeHtml"></td>
+                            </tr>
+                        </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pt-1" *ngIf="assessmentsData && assessmentsData.assessments[itemSurveyIndex] && !ending">
+                <span (click)="expands[itemSurveyIndex] = !expands[itemSurveyIndex]"
+                      class="survey-title">{{ romanize(itemSurveyIndex + 1) + '. ' + (assessmentsData.assessments[itemSurveyIndex].name || '')}}
+                    <i [title]="expands[itemSurveyIndex] ? 'Collapse' : 'Expand'" class="ml-1 fa"
+                       [ngClass]="{'fa-arrow-down': !expands[itemSurveyIndex], 'fa-arrow-up': expands[itemSurveyIndex]}"></i>
+                    </span>
+                    <div style="text-align: justify; margin: 0 20px 0 0;" *ngIf="expands[itemSurveyIndex]"
+                         class="description"
+                         [innerHTML]="assessmentsData.assessments[itemSurveyIndex].description | safeHtml"></div>
+                    <hr/>
+                    <div>
+                        <div class="text-right pb-3">
+                            <button *ngIf="itemSurveyIndex !== 0" class="btn btn-info" style="margin-right: 7px;"
+                                    (click)="previous()">{{ 'Quay lại' }}</button>
+                            <button style="margin-right: 7px;" *ngIf="checkCanSubmit()"
+                                    [disabled]="!checkScores(itemSurveyIndex)" class="btn"
+                                    [ngClass]="{'btn-primary': itemSurveyIndex < totalSurveys - 1, 'btn-success': itemSurveyIndex >= totalSurveys - 1}"
+                                    (click)="next()">{{ (itemSurveyIndex < totalSurveys - 1) ? 'Tiếp tục' : 'Kết thúc đánh giá' }}</button>
+                        </div>
+                        <div class="staff-area">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th style="width: 50px">STT</th>
+                                    <th style="width: 450px">Họ tên</th>
+                                    <th class="text-center" *ngFor="let col of genScores(10)"
+                                        style="width: 30px">{{col + ' Điểm'}}</th>
+                                </tr>
+                                </thead>
+                                <tbody *ngIf="assessmentsData.assessments[itemSurveyIndex].users">
+                                <ng-container
+                                        *ngFor="let staff of assessmentsData.assessments[itemSurveyIndex].users; let staff_index = index;">
+                                    <tr>
+                                        <td class="text-center"
+                                            [rowSpan]="(!staff.has_assessment && staff.score < 1) ? 2 : 1">{{ pad(staff_index + 1, 2)}}</td>
+                                        <td class="text-left"
+                                            [rowSpan]="((!staff.has_assessment && staff.score < 1) || staff.has_assessment) ? 2 : 1">{{ convertFullname(staff.name)}}</td>
+                                        <ng-container *ngIf="!staff.has_assessment">
+                                            <td class="form-group text-right" *ngFor="let sc of genScores(10)">
+                                        <span *ngIf="!staff.has_assessment" class="d-flex">
+                                            <label class="rad">
+                                                <input class="form-control" [(ngModel)]="staff.score" type="radio"
+                                                       [name]="'score' + itemSurveyIndex + '_' + staff_index"
+                                                       [value]="sc">
+                                                <i [title]="sc + ' Điểm'" class="fa"
+                                                   [ngClass]="{'fa-square-o' : staff.score !== sc, 'fa-check-square-o' : staff.score === sc}"></i>
+                                            </label>
+                                        </span>
+                                            </td>
+                                        </ng-container>
+                                        <td *ngIf="staff.has_assessment" colspan="11">
+                                            <span>{{staff.score + ' Điểm'}}</span></td>
+                                    </tr>
+                                    <tr *ngIf="!staff.has_assessment && staff.score < 1">
+                                        <td colspan="11"><span class="text-danger"
+                                                               style="font-style: italic; font-weight: bold">Điểm phải lớn hơn 0</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="13" class="text-left">
+                                            <p *ngIf="!staff.has_assessment"
+                                               style="margin-bottom: 3px; margin-top: 5px;"><strong>Hãy nêu dẫn chứng
+                                                cho sự lựa chọn của bạn (vui lòng nêu rõ):</strong></p>
+                                            <textarea *ngIf="!staff.has_assessment" class="form-control"
+                                                      [(ngModel)]="staff.comment"></textarea>
+                                            <span *ngIf="staff.has_assessment"
+                                                  [innerHTML]="'<strong>Nhận xét: </strong>' + staff.comment | safeHtml"></span>
+                                            <hr style="border: 1px solid #9c5002;"/>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+                <div class="pt-1 text-center ending-area" *ngIf="ending">
+                    BẠN ĐÃ HOÀN THÀNH ĐÁNH GIÁ
+                </div>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+    <jw-modal id="employee-survey-info">
+        <h1 class="modal-header" style="color: #095385; font-weight: bold; font-size: 15pt">Chi Tiết Đánh Giá</h1>
+        <div class="modal-body" *ngIf="selectedAssessmentSurvey">
+            <div class="assessment_body3">
+                <div>
+                    <span style="font-weight: bold; margin-right: 10px">Phòng ban:</span><span>{{ selectedAssessmentSurvey?.department_name || '' }}</span>
+                    <span style="font-weight: bold; margin-left: 30px; margin-right: 10px">Người đánh giá:</span><span>{{ convertFullname(selectedAssessmentSurvey?.full_name) }}</span>
+                    <span style="font-weight: bold; margin-left: 30px; margin-right: 10px">Chức vụ:</span><span>{{ convertFullname(selectedAssessmentSurvey?.position) }}</span>
+                </div>
+                <div class="pt-1"
+                     *ngIf="selectedAssessmentSurvey && selectedAssessmentSurvey.assessments && selectedAssessmentSurvey.assessments[itemSurveyIndexInfo]">
+                    <span class="survey-title">{{ romanize(itemSurveyIndexInfo + 1) + '. ' + (selectedAssessmentSurvey.assessments[itemSurveyIndexInfo].name || '')}}</span>
+                    <div style="text-align: justify; margin: 0 20px 0 0;" class="description"
+                         [innerHTML]="selectedAssessmentSurvey.assessments[itemSurveyIndexInfo].description | safeHtml"></div>
+                    <hr/>
+                    <div>
+                        <div class="text-right pb-3">
+                            <button *ngIf="itemSurveyIndexInfo !== 0" class="btn btn-info" style="margin-right: 7px;"
+                                    (click)="previousInfo()">{{ 'Quay lại' }}</button>
+                            <button *ngIf="itemSurveyIndexInfo < selectedAssessmentSurvey.assessments.length - 1" style="margin-right: 7px;" class="btn btn-primary"
+                                    (click)="nextInfo()">Tiếp tục</button>
+                        </div>
+                        <div class="staff-area2">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th style="width: 50px">STT</th>
+                                    <th style="width: 450px">Họ tên</th>
+                                    <th class="text-center" *ngFor="let col of genScores(10)"
+                                        style="width: 30px">{{col + ' Điểm'}}</th>
+                                </tr>
+                                </thead>
+                                <tbody *ngIf="selectedAssessmentSurvey.assessments[itemSurveyIndexInfo].users">
+                                <ng-container
+                                        *ngFor="let staff of selectedAssessmentSurvey.assessments[itemSurveyIndexInfo].users; let staff_index = index;">
+                                    <tr>
+                                        <td class="text-center">{{ pad(staff_index + 1, 2)}}</td>
+                                        <td class="text-left">{{ convertFullname(staff.name)}}</td>
+                                        <td colspan="11"><span>{{staff.score + ' Điểm'}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="13" class="text-left">
+                                            <span [innerHTML]="'<strong>Nhận xét: </strong>' + staff.comment | safeHtml"></span>
+                                            <hr style="border: 1px solid #9c5002;"/>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-info" (click)="closeModal('employee-survey-info');">Đóng</button>
+        </div>
+    </jw-modal>
+</div>

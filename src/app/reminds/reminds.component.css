@@ -1,0 +1,93 @@
+table {
+    width: 100%;
+}
+td.mat-cell, td.mat-footer-cell {
+    vertical-align: middle !important;
+}
+th.mat-header-cell {
+    vertical-align: middle !important;
+}
+th.mat-header-cell {
+    color: white;
+    font-weight: bold;
+    background: #266eaf;
+    text-transform: uppercase !important;
+}
+.table-container {
+    max-height: calc(100vh - 250px);
+    overflow: auto;
+}
+.assessment_body{
+    max-height: 750px;
+    overflow: auto;
+}
+.staff-area{
+    margin-left: 20px;
+}
+.staff-area thead th{
+    background: #266eaf;
+    color: white;
+    position: sticky;
+    z-index: 2;
+    top: 0;
+}
+.staff-area tbody td{
+    vertical-align: top !important;
+    padding: 1px;
+}
+.disable{
+    cursor: not-allowed;
+}
+.submit-assessment{
+    position: absolute;
+    right: 20px;
+    top: 8px;
+}
+th.mat-column-name{
+    width: 180px !important;
+}
+th.mat-column-id{
+    width: 100px !important;
+}
+
+.mat-elevation-z8{
+    position: relative;
+}
+.export.btn{
+    position: absolute;
+    z-index: 999;
+    right: 22px;
+    top: 8px;
+}
+.modal-header{
+    color: #095385;
+    font-weight: bold;
+    font-size: 15pt;
+}
+.modal-body{
+    color: black;
+    font-size: 13pt;
+}
+.modal-footer{
+    padding-bottom: 0 !important;
+}
+.fa {
+    cursor: pointer;
+    opacity: 1;
+}
+.fa:hover {
+    opacity: 0.75;
+}
+.fa.fa-pencil{
+    border: 1px solid black;
+    border-radius: 50%;
+    margin: 10px 10px;
+    padding: 10px;
+    background: #266eaf;
+    color: white;
+}
+.fa.fa-pencil:hover{
+    border: 1px solid #5c5c5c;
+    background: rgba(54, 156, 248, 0.31);
+    color: #095385;
+}

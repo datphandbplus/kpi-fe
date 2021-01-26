@@ -1,0 +1,167 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+body {
+    font-family: Roboto, Arial, sans-serif;
+    margin: 0;
+}
+
+.basic-container {
+    padding: 5px;
+}
+
+.version-info {
+    font-size: 8pt;
+    float: right;
+}
+
+.mat-tab-label .mat-tab-label-content  {
+    color: black !important;
+    font-weight: bold !important;
+}
+.mat-tab-label-active .mat-tab-label-content {
+    color: #044077 !important;
+    font-weight: bold !important;
+}
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: #044077;
+}
+
+.navbar{
+    height: 48px;
+    position: fixed;
+    width: 100%;
+}
+
+.sidenav {
+    height: calc(100% - 49px);
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 49px;
+    left: 0;
+    background-color: #343a40;
+    overflow-x: hidden;
+}
+.main{
+    width: calc(100% - 160px);
+    top: 49px;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    position: fixed;
+    padding: 0 10px;
+    margin-left: 160px; /* Same as the width of the sidenav */
+    font-size: 14px; /* Increased text to enable scrolling */
+}
+.main2{
+    width: 100%;
+    top: 49px;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    position: fixed;
+    padding: 0 80px;
+    font-size: 14px; /* Increased text to enable scrolling */
+}
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #818181;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #91a4f1;
+}
+
+.jumbotron{
+    height: 100vh;
+    padding-left: 30%;
+    padding-right: 30%;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+a.sidenav-disactive{
+    color: white;
+}
+a.sidenav-active{
+    color: #e1b25c;
+}
+a.dropdown-item{
+    color: #044077 !important;
+}
+.navbar{
+    z-index: 1;
+}
+jw-modal {
+    /* modals are hidden by default */
+    display: none;
+}
+jw-modal .jw-modal {
+    /* modal container fixed across whole screen */
+    position: fixed;
+    width: 750px;
+    top: 0;
+    left: calc(50% - 325px);
+    bottom: 0;
+    /* z-index must be higher than .jw-modal-background */
+    z-index: 1000;
+    /* enables scrolling for tall modals */
+    overflow: auto;
+}
+jw-modal .jw-modal .jw-modal-body {
+    padding: 20px;
+    background: #fff;
+    /* margin exposes part of the modal background */
+    margin: 40px;
+}
+jw-modal .jw-modal-background {
+    /* modal background fixed across whole screen */
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* semi-transparent black  */
+    background-color: #000;
+    opacity: 0.75;
+    /* z-index must be below .jw-modal and above everything else  */
+    z-index: 900;
+}
+body.jw-modal-open {
+    /* body overflow is hidden to hide main scrollbar when modal window is open */
+    overflow: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.table-hover tbody tr:hover td{
+    background: #99ccff !important;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td {
+    background-color: #fff2e6;
+}

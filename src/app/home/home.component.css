@@ -1,0 +1,196 @@
+table {
+    width: 100%;
+}
+::ng-deep.mygod{
+    height: 150px !important;
+    overflow: auto !important;
+}
+td.mat-cell, td.mat-footer-cell {
+    vertical-align: top !important;
+}
+th.mat-header-cell, th {
+    color: white;
+    font-weight: bold;
+    background: #266eaf;
+    vertical-align: middle !important;
+}
+.table-container {
+    max-height: calc(100vh - 280px);
+    overflow: auto;
+}
+.assessment_body{
+    height: calc(100% - 650px);
+    overflow-y: auto;
+}
+.assessment_body2{
+}
+.assessment_body3{
+}
+.staff-area{
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+}
+.staff-area2{
+    max-height: 450px;
+    overflow-y: auto;
+}
+.staff-area thead th, .staff-area2 thead th{
+    background: #266eaf;
+    color: white;
+    position: sticky;
+    z-index: 2;
+    top: 0;
+}
+
+.staff-area tbody td, .staff-area2 tbody td{
+    vertical-align: top !important;
+    padding: 1px;
+}
+.disable{
+    cursor: not-allowed;
+}
+.fa, .survey-title {
+    cursor: pointer;
+    opacity: 1;
+}
+.survey-title{
+    color: #f44336;
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+.fa:hover, .survey-title:hover {
+    opacity: 0.7;
+}
+.staff-area table tbody tr td{
+    padding: 5px 10px !important;
+}
+.fa{
+    z-index: 1;
+}
+.mat-elevation-z8{
+    position: relative;
+}
+.export.btn{
+    position: absolute;
+    z-index: 999;
+    right: 22px;
+    top: 8px;
+}
+.ending-area{
+    color: #2e5db5;
+    font-size: 40px;
+    text-shadow: 1px 1px orangered;
+    font-weight: bold;
+    background: #dcd7d1;
+}
+.pt-1{
+    padding-top: 1.25rem !important;
+}
+.description{
+    font-size: 17px;
+}
+.score{
+
+}
+.rad{
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    position: relative;
+    height: 22px;
+}
+.rad > input{ /* HIDE ORG RADIO & CHECKBOX */
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+/* RADIO & CHECKBOX STYLES */
+/* DEFAULT <i> STYLE */
+.rad > i{
+    display: inline-block;
+    vertical-align: middle;
+    border: 0;
+    font-size: 25pt;
+    margin: 0;
+    padding: 0;
+    left: 24px;
+    top: -3px;
+    position: absolute;
+    color: #266eaf;
+    opacity: 1;
+}
+/* CHECKBOX OVERWRITE STYLES */
+.rad:hover > i{ /* HOVER <i> STYLE */
+    box-shadow: unset !important;
+    background: unset !important;
+    opacity: 0.85;
+}
+.rad > input:checked + i{ /* (RADIO CHECKED) <i> STYLE */
+    box-shadow: unset !important;
+    background: unset !important;
+}
+[type=radio] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+td.mat-cell{
+    padding-right: 0 !important;
+}
+
+.modal-header{
+    color: #095385;
+    font-weight: bold;
+    font-size: 15pt;
+}
+.modal-body{
+    color: black;
+    font-size: 13pt;
+}
+.modal-footer{
+    padding-bottom: 0 !important;
+}
+.fa {
+    cursor: pointer;
+    opacity: 1;
+}
+.fa:hover {
+    opacity: 0.75;
+}
+.fa.fa-pencil{
+    border: 1px solid black;
+    border-radius: 50%;
+    margin: 10px 10px;
+    padding: 10px;
+    background: #266eaf;
+    color: white;
+}
+.fa.fa-pencil:hover{
+    border: 1px solid #5c5c5c;
+    background: rgba(54, 156, 248, 0.31);
+    color: #095385;
+}
+::ng-deep #employee-survey-info {
+    /* modals are hidden by default */
+    display: none;
+}
+::ng-deep #employee-survey-info .jw-modal {
+    /* modal container fixed across whole screen */
+    position: fixed;
+    width: 1100px !important;
+    height: 700px;
+    top: 48px;
+    left: calc(50% - 550px) !important;
+    bottom: 0;
+    /* z-index must be higher than .jw-modal-background */
+    z-index: 1000;
+    /* enables scrolling for tall modals */
+    overflow: auto;
+}
+::ng-deep #employee-survey-info .jw-modal .jw-modal-body{
+    margin: 0;
+}
